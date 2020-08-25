@@ -301,14 +301,10 @@ def extract_outputs_from_inbound_nodes(model):
 
 
 def build_layer_output_from_model(model, output_dict, input_names, output_names, input_specs):
-    if is_subclassing(model):
-        tf.compat.v1.enable_tensor_equality()  # re-enable tensor tensor equality for subclassing model.
-        return extract_outputs_from_subclassing_model(model, output_dict, input_names, output_names, input_specs)
-    else:
-        graph = model.outputs[0].graph
-        output_names.extend([n.name for n in model.outputs])
-        output_dict.update(extract_outputs_from_inbound_nodes(model))
-        return graph
+    graph = model.outputs[0].graph
+    output_names.extend([n.name for n in model.outputs])
+    output_dict.update(extract_outputs_from_inbound_nodes(model))
+    return graph
 
 
 def on_parsing_keras_layer_v2(graph, layer_info, varset, prefix=None):
